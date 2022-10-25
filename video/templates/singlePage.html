@@ -1,0 +1,174 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      <h1 class="heading">{{video.title}}</h1>
+      <video width="100%" height="500" controls autoplay>
+        <source src="{{video.video.url}}" type="video/mp4" />
+      </video>
+
+      <hr />
+      <h3 class="mt-2" style="color: gray">
+        <button class="btn btn-primary">
+          <i class="thumbs up icon"></i>
+        </button>
+        <button class="btn btn-danger">
+          <i class="thumbs down outline icon"></i>
+        </button>
+        <button class="btn btn-info">
+          <i class="share icon"></i>
+        </button>
+        <button class="btn btn-info">
+          <i class="download icon"></i>
+        </button>
+      </h3>
+      <p style="color: gray">{{video.views.count}} views &nbsp;&#8226;&nbsp; {{video.created}}</p>
+      <hr />
+
+      <div class="input-group mb-3">
+        <form
+          id="{{video.id}}"
+          action="{% url 'save-comment' video.id %}"
+          method="POST"
+          class="form-control"
+        >
+          {% csrf_token %} {{commentBox}}
+
+          <button
+            type="submit"
+            name="submitComment"
+            class="btn btn-outline-secondary commentAddBtn"
+          >
+            Add Comment Publicly
+          </button>
+        </form>
+      </div>
+
+      <p class="content" id="contentID">
+        {{video.content|slice:100}}....
+        <span class="seeMore" onclick="toggleSeeMore()">See More</span>
+      </p>
+
+      <p class="content" id="contentID2" style="display: none">
+        {{video.content}}....
+        <span class="seeMore" onclick="toggleSeeMore()">See Less</span>
+      </p>
+      <br />
+      {% if video.comment_set.all.count is not 0 %}
+      <h1>Comment({{video.comment_set.all.count}})</h1>
+
+      <div class="commentShow">
+        {% for item in video.comment_set.all %}
+
+        <div class="card CommentBody">
+          <div class="card-body">
+            <p class="commentInnerBody">
+              {{item.user.username}} Said : {{item.body}} on {{item.created}}
+            </p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <h1 class="my-2">Be the First One to Do Comment</h1>
+      <br />
+      {% endif %}
+    </div>
+    <div class="col-md-4">
+      <h1>Watch More</h1>
+      <hr />
+
+      {% for item in allVdos %}
+      <a href="{% url 'video-reading' item.id item.title|slugify %}">
+        <div class="row">
+          <div class="col-md-6">
+            <img
+              src="{{item.thumbnail.url}}"
+              alt=""
+              height="110px"
+              width="100%"
+              class="relImgae mt-2"
+            />
+          </div>
+          <div class="col-md-6">
+            <p class="RelTitle">{{item.title|slice:50}}...</p>
+            <p class="relCreation">{{item.created}}</p>
+            <p class="relCreation">{{item.views.count}} views</p>
+          </div>
+        </div>
+      </a>
+
+      {% endfor %}
+    </div>
+  </div>
+  <p align = "center" style="color:gray">It looks Like You Come At The End</p>
+  <br>
+</div>
+<style>
+  .heading {
+    font-size: 35px;
+  }
+  .content {
+    text-align: justify;
+    font-size: 15px;
+  }
+  .seeMore {
+    color: gray;
+    font-weight: bold;
+  }
+
+  .seeMore:hover {
+    cursor: pointer;
+  }
+  .relImgae {
+    border: 1px solid grey;
+    border-radius: 1px;
+  }
+  p.RelTitle {
+    font-size: 15px;
+    font-weight: bolder;
+    margin: 13px 0px 3px 0px;
+  }
+  .relCreation {
+    color: gray;
+    margin: 0px;
+  }
+  .form-control {
+    display: flex;
+    justify-content: center;
+    height: 80px;
+  }
+  .commentAddBtn {
+    height: 40px;
+    margin: 15px 5px 0px 0px;
+  }
+  #id_body {
+    height: 40px;
+    width: 75%;
+    margin: 15px 5px 0px 0px;
+  }
+
+  .CommentBody {
+    margin: 10px 0px 10px 0px;
+  }
+  .commentInnerBody {
+    font-size: 15px;
+    font-weight: bolder;
+    color: gray;
+  }
+
+</style>
+
+<script>
+  function toggleSeeMore() {
+    if (document.getElementById("contentID2").style.display == "block") {
+      document.getElementById("contentID2").style.display = "none";
+      document.getElementById("contentID").style.display = "block";
+    } else {
+      document.getElementById("contentID2").style.display = "block";
+      document.getElementById("contentID").style.display = "none";
+    }
+  }
+</script>
+{% endblock content %}

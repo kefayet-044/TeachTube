@@ -1,0 +1,26 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="container">
+  <h3>Upload A Video</h3>
+  <form
+    action="{% url 'save-video' %}"
+    class="form-control"
+    enctype="multipart/form-data"
+    method="POST"
+  >
+    {% csrf_token %} {{vForm.as_p}}
+
+    <button name="update-btn" type="submit" class="ui button primary mt-1">
+      Start Process
+    </button>
+  </form>
+</div>
+{% endblock content %} {% block scripts %}
+<script>
+  document.getElementById("id_title").classList.add("form-control");
+  document.getElementById("id_content").classList.add("form-control");
+  document.getElementById("id_thumbnail").classList.add("form-control");
+  document.getElementById("id_video").classList.add("form-control");
+  document.getElementById("id_category").classList.add("form-control");
+</script>
+{% endblock scripts %}

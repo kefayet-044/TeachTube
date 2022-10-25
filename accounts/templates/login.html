@@ -1,0 +1,52 @@
+{% extends 'base.html' %} {% block content %}
+
+<style>
+    body{
+        background-color: #27274d;
+    }
+</style>
+<div class="container" style="text-align: justify; max-width: 900px; margin-top: 170px;">
+  <form
+    class="form-group"
+    action="{% url 'login-account' %}"
+    method="POST"
+    enctype="multipart/form-data"
+  >
+    {% csrf_token %}
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title"><h1>Login Your Account</h1></div>
+        <hr />
+        <div class="ui small form">
+          <div class="two fields">
+            <div class="field">
+              <label>Email:</label>
+              <input
+                type="email"
+                placeholder="Enter Email"
+                name="email"
+                required
+              />
+            </div>
+            <div class="field">
+              <label>Password:</label>
+              <input
+                placeholder="Enter Password"
+                type="password"
+                required
+                name="password"
+              />
+            </div>
+          </div>
+
+          <button type="submit" class="ui blue basic button">Login</button>
+        </div>
+      </div>
+    </div>
+  </form>
+  <p class="my-2" style="color: white;">
+    Haven't any Account? <a href="{% url 'register-account' %}">Register</a>
+  </p>
+</div>
+
+{% endblock content %}
